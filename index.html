@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Login to timetable.gre.ac.uk</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline'" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="wizard-header grey-bg">
+      <h1>Login to timetable.gre.ac.uk</h1>
+    </header>
+    <main class="wizard-main">
+      <div class="wizard-main__content">
+        <p>
+          This program can transform your University of Greenwich timetable into
+          an iCalendar file, which can be imported into your favourite calendar
+          app and shown on your laptop or phone without having to log in to the
+          website.
+        </p>
+        <p>
+          To do this, you need to log in to the website so that the program can
+          download your timetable.
+          <strong
+            >Your login information will not be shared with anyone other than
+            the University.</strong
+          >
+        </p>
+
+        <button id="wizard-main__login-button" type="button">
+          Log in to timetable.gre.ac.uk
+        </button>
+        <p id="wizard-main__cookies-loaded" style="visibility: hidden">
+          Login cookies exfiltrated. Please continue.
+        </p>
+      </div>
+    </main>
+    <footer class="wizard-footer grey-bg">
+      <a href="step2.html">Skip</a>
+      <button id="wizard-footer__next-btn" type="button" disabled>Next</button>
+    </footer>
+    <script type="module" src="step1.js"></script>
+  </body>
+</html>

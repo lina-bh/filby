@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Download timetable data</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline'" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="wizard-header grey-bg">
+      <h1>Download timetable data</h1>
+    </header>
+    <main class="wizard-main">
+      <div class="wizard-main__content">
+        <p>
+          The program can now download your timetabled sessions from the
+          university system. Please select the current term. Make sure that your
+          timetable is settled, otherwise the calendar file won't be fully
+          populated.
+        </p>
+        <form id="term-form" onSubmit="(event) => event.preventDefault()">
+          <label
+            ><input type="radio" id="term-form__term-1" name="term" value="1" />
+            Term 1 (September to December)</label
+          >
+          <label
+            ><input type="radio" id="term-form__term-2" name="term" value="2" />
+            Term 2 (January to April)</label
+          >
+          <label
+            ><input type="radio" id="term-form__term-3" name="term" value="3" />
+            Term 3 (April to June and July)</label
+          >
+          <button id="term-form__submit" type="submit">Do it</button>
+        </form>
+        <p id="wizard-main__data-loaded-msg" style="visibility: hidden">
+          Timetable data fetched. Please continue.
+        </p>
+      </div>
+    </main>
+    <footer class="wizard-footer grey-bg">
+      <button id="wizard-footer__load-btn" type="button">Load from file</button>
+      <button id="wizard-footer__next-btn" type="button" disabled>Next</button>
+    </footer>
+    <script type="module" src="step2.js"></script>
+  </body>
+</html>

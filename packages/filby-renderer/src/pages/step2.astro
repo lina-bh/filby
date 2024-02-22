@@ -1,0 +1,87 @@
+---
+import WizardPage from "../layouts/WizardPage.astro";
+---
+
+<WizardPage title="Download timetable data">
+  <p>
+    The program can now download your timetabled sessions from the university
+    system. Please select the current term. Make sure that your timetable is
+    settled, otherwise the calendar file won't be fully populated.
+  </p>
+  <form id="term-form">
+    <label
+      ><input type="radio" id="term-form__term-1" name="term" value="1" />
+       Term 1 (September to December)</label
+    >
+    <label
+      ><input type="radio" id="term-form__term-2" name="term" value="2" />
+       Term 2 (January to April)</label
+    >
+    <label
+      ><input type="radio" id="term-form__term-3" name="term" value="3" />
+       Term 3 (April to June and July)</label
+    >
+    <button id="term-form__submit" type="submit">Do it</button>
+  </form>
+  <p id="wizard-main__data-loaded-msg" style="visibility: hidden">
+    Timetable data fetched. Please continue.
+  </p>
+
+  <div slot="footer">
+    <button id="wizard-footer__load-btn" type="button">Load from file</button>
+    <button id="wizard-footer__next-btn" type="button" disabled>Next</button>
+  </div>
+</WizardPage>
+
+<script>
+  import { $ } from "../scripts/renderer-common";
+
+  const nextBtn = $("#wizard-footer__next-btn") as HTMLButtonElement;
+  nextBtn.addEventListener("click", () => {
+    location.href = "/step3";
+  });
+
+  const termForm = $("#term-form") as HTMLFormElement;
+  const termFormSubmit = $("#term-form__submit") as HTMLButtonElement;
+
+  const dataLoadedMsg = $(
+    "#wizard-main__data-loaded-msg",
+  ) as HTMLParagraphElement;
+
+  termForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    termFormSubmit.disabled = true;
+    const formData = new FormData(termForm);
+    const term = parseInt(formData.get("term") as string, 10);
+    try {
+      await electronAPI.fetchActivities(term);
+      dataLoadedMsg.style.visibility = "visible";
+      nextBtn.disabled = false;
+    } catch (error) {
+      termFormSubmit.disabled = false;
+      throw error;
+    }
+  });
+
+  $<HTMLButtonElement>("#wizard-footer__load-btn").addEventListener(
+    "click",
+    async () => {
+      await window.electronAPI.readActivities();
+      termFormSubmit.disabled = true;
+      dataLoadedMsg.style.visibility = "visible";
+      nextBtn.disabled = false;
+    },
+  );
+</script>
+
+<style>
+  #term-form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5em;
+  }
+
+  #term-form > label {
+    display: block;
+  }
+</style>

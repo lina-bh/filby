@@ -1,22 +1,17 @@
-const fs = require("node:fs/promises");
+import * as fs from "node:fs/promises";
+import { Writable } from "node:stream";
 
-let fp;
-/** @type {fs.WriteStream} */
-let stream;
+let fp: fs.FileHandle;
+let stream: Writable;
 
 const openLog = async () => {
   fp = await fs.open("/dev/stderr", "a");
   stream = fp.createWriteStream();
 };
 
-/**
- * @param {string} message
- */
-const writeLog = async (message) => {
+export const writeLog = async (message: string) => {
   if (!stream) {
     await openLog();
   }
   return stream.write(message + "\n");
 };
-
-module.exports = { writeLog };

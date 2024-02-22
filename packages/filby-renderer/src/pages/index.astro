@@ -1,0 +1,61 @@
+---
+import WizardPage from "../layouts/WizardPage.astro";
+---
+
+<WizardPage title="Login to timetable.gre.ac.uk">
+  <p>
+    This program can transform your University of Greenwich timetable into an
+    iCalendar file, which can be imported into your favourite calendar app and
+    shown on your laptop or phone without having to log in to the website.
+  </p>
+  <p>
+    To do this, you need to log in to the website so that the program can
+    download your timetable.
+    <strong
+      >Your login information will not be shared with anyone other than the
+      University.</strong
+    >
+  </p>
+
+  <button id="wizard-main__login-button" type="button">
+    Log in to timetable.gre.ac.uk
+  </button>
+  <p id="wizard-main__cookies-loaded" style="visibility: hidden">
+    Login cookies exfiltrated. Please continue.
+  </p>
+  <div slot="footer">
+    <a href="./step2/index.html">Skip</a>
+    <button id="wizard-footer__next-btn" type="button" disabled>Next</button>
+  </div>
+</WizardPage>
+
+<script>
+  import { $ } from "../scripts/renderer-common";
+
+  const loginBtn = $("#wizard-main__login-button") as HTMLButtonElement;
+
+  const nextBtn = $("#wizard-footer__next-btn") as HTMLButtonElement;
+  nextBtn.addEventListener("click", () => {
+    location.href = "./step2/index.html";
+  });
+
+  const exfiltratedMessage = $(
+    "#wizard-main__cookies-loaded",
+  ) as HTMLParagraphElement;
+
+  loginBtn.addEventListener("click", async (event) => {
+    loginBtn.disabled = true;
+    try {
+      const res = await window.electronAPI.runLogin();
+      if (res) {
+        loginBtn.disabled = true;
+        exfiltratedMessage.style.visibility = "visible";
+        nextBtn.disabled = false;
+        return;
+      }
+    } catch (error) {
+      loginBtn.disabled = false;
+      throw error;
+    }
+  });
+</script>

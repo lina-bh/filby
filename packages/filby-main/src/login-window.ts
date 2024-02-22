@@ -1,12 +1,11 @@
-"use strict";
-const { BrowserWindow } = require("electron");
-const wait = require("./wait.js");
-const { setUserAgent } = require("./user-agent.js");
-const { postToMain } = require("./main-window.js");
+import { BrowserWindow } from "electron";
+import wait from "./wait";
+import { setUserAgent } from "./user-agent";
+import { postToMain } from "./main-window";
 
 const TIMETABLE_GRE_AC_UK = "https://timetable.gre.ac.uk/";
 
-let loginWindow = null;
+let loginWindow: BrowserWindow | null = null;
 
 const makeLoginWindow = async () => {
   if (loginWindow && !loginWindow.isDestroyed()) {
@@ -42,7 +41,7 @@ const makeLoginWindow = async () => {
   loginWindow = window;
 };
 
-const runLoginFlow = async () => {
+export const runLoginFlow = async (): Promise<boolean> => {
   const window = new BrowserWindow({
     // parent: mainWindow,
     width: 400,
@@ -55,7 +54,7 @@ const runLoginFlow = async () => {
     setUserAgent(window.webContents.userAgent);
   });
 
-  let url;
+  let url = "";
   window.webContents.on("did-finish-load", async () => {
     url = window.webContents.getURL();
     if (url === TIMETABLE_GRE_AC_UK) {
@@ -70,8 +69,6 @@ const runLoginFlow = async () => {
         window.on("closed", () => {
           r(url === TIMETABLE_GRE_AC_UK);
         });
-      })
+      }),
   );
 };
-
-module.exports = { makeLoginWindow, runLoginFlow };

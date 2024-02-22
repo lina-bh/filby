@@ -1,0 +1,21 @@
+---
+import WizardPage from "../layouts/WizardPage.astro";
+---
+
+<WizardPage title="Complete">
+  <p>
+    You should now be able to import the saved file into Google Calendar or
+    iCalendar.
+  </p>
+  <div class="spacer"></div>
+  <p>Thank you</p>
+  <div slot="footer">
+    <button type="button">Quit</button>
+  </div>
+</WizardPage>
+
+<style>
+  .spacer {
+    flex: 1;
+  }
+</style>

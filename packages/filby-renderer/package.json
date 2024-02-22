@@ -1,0 +1,22 @@
+{
+  "name": "filby-renderer",
+  "private": true,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.2.0",
+    "astro": "^3.2.3"
+  },
+  "devDependencies": {
+    "tslib": "*",
+    "typescript": "*"
+  }
+}

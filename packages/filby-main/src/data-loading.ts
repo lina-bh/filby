@@ -1,15 +1,24 @@
-"use strict";
-/** @typedef (import("./index.d.ts").Activity) */
-const { session, dialog } = require("electron");
-const fs = require("node:fs/promises");
-const range = require("lodash/range");
-const axios = require("axios");
-const { userAgent } = require("./user-agent.js");
-const { postToMain } = require("./main-window.js");
-const { writeLog } = require("./log.js");
+import { session, dialog } from "electron";
+import * as fs from "node:fs/promises";
+import range from "lodash/range";
+import * as axios from "axios";
+import { userAgent } from "./user-agent";
+import { getMainWindow, postToMain } from "./main-window";
+import { writeLog } from "./log";
 
-/** @type {Activity[]} */
-let loadedAktvs = [];
+interface Activity {
+  name: string;
+  room: string[];
+  startDate: string;
+  endDate: string;
+  startTime: string;
+  endTime: string;
+  day: number;
+}
+
+let loadedAktvs: Activity[] = [];
+
+export const getActivities = () => loadedAktvs;
 
 const loginCookiesHeaderValue = async () => {
   const sesh = session.fromPartition("login");
@@ -42,14 +51,10 @@ const weeksInTerm = (term) => {
 
 const loadActivities = (rawData) => {
   loadedAktvs = rawData[0].activities;
-  // writeLog(JSON.stringify(loadedAktvs));
   return loadedAktvs;
 };
 
-/**
- * @param {number} term
- */
-const fetchActivities = async (term) => {
+export const fetchActivities = async (term: number) => {
   const weeks = weeksInTerm(term).join(";");
   const resp = await axios.get(
     "https://timetable.gre.ac.uk/api/2023/timetable/my/student",
@@ -60,13 +65,13 @@ const fetchActivities = async (term) => {
         Cookie: await loginCookiesHeaderValue(),
         "User-Agent": userAgent,
       },
-    }
+    },
   );
   return loadActivities(resp.data);
 };
 
-const readActivities = async () => {
-  const ret = await dialog.showOpenDialog(null, {
+export const readActivities = async () => {
+  const ret = await dialog.showOpenDialog(getMainWindow(), {
     properties: ["openFile"],
   });
   if (ret.canceled) {
@@ -75,12 +80,4 @@ const readActivities = async () => {
   const path = ret.filePaths[0];
   const data = await fs.readFile(path, { encoding: "utf-8" });
   return loadActivities(JSON.parse(data));
-};
-
-module.exports = {
-  readActivities,
-  fetchActivities,
-  get loadedAktvs() {
-    return loadedAktvs;
-  },
 };

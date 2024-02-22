@@ -1,17 +1,18 @@
 {
   "private": true,
+  "version": "1.0.0",
   "scripts": {
+    "build-all": "npm run build --ws",
     "start": "electron index.js"
   },
-  "dependencies": {
-    "axios": "^1.5.1",
-    "electron": "^26.3.0",
-    "ics": "^3.5.0",
-    "lodash": "^4.17.21",
-    "rrule": "^2.7.2"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@types/lodash": "^4.14.199",
-    "prettier": "^3.0.3"
-  }
+    "prettier": "^3.0.3",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2"
+  },
+  "workspaces": [
+    "packages/filby-main",
+    "packages/filby-renderer"
+  ]
 }

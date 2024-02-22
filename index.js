@@ -1,3 +1,3 @@
-const { main } = require("./main");
+const { main } = require("filby-main");
 
-main();
+main(require.resolve("filby-renderer/dist/index.html"));
